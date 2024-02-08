@@ -222,8 +222,8 @@ if TYPE_CHECKING:
             MaxTimeCriteria,
             StoppingCriteria,
             StoppingCriteriaList,
-            validate_stopping_criteria,
             StopStringCriteria,
+            validate_stopping_criteria,
         )
         from .utils import (
             BeamSampleDecoderOnlyOutput,
