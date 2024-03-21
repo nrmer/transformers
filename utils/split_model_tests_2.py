@@ -42,3 +42,12 @@ if __name__ == "__main__":
     print(len(sec))
     print(sec[:4])
 
+    sec = os.getenv("CI_SLACK_REPORT_CHANNEL_ID", None)
+    print(type(sec))
+    print(len(sec))
+    print(sec[:4])
+
+    sec = os.getenv("ACCESS_REPO_INFO_TOKEN", None)
+    print(type(sec))
+    print(len(sec))
+    print(sec[:4])
