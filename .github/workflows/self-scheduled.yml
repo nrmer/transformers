@@ -6,19 +6,7 @@ name: Self-hosted runner (scheduled)
 # `huggingface/transformers-pytorch-deepspeed-latest-gpu`, which can be found at
 # `docker/transformers-pytorch-deepspeed-latest-gpu/Dockerfile`
 
-on:
-  workflow_call:
-    inputs:
-      job:
-        required: true
-        type: string
-    secrets:
-      CI_SLACK_BOT_TOKEN:
-        required: true
-      CI_SLACK_REPORT_CHANNEL_ID:
-        required: true
-      ACCESS_REPO_INFO_TOKEN:
-        required: true
+
 
 env:
   HF_HOME: /mnt/cache
@@ -457,7 +445,7 @@ jobs:
 
   send_results:
     name: Slack Report
-    needs: "${{ inputs.job }}"
+    needs: ${{ inputs.job }}
     uses: ./.github/workflows/slack-report.yml
     with:
       job: ${{ inputs.job }}
