@@ -77,21 +77,21 @@ jobs:
 #        run: |
 #          nvidia-smi
 #
-#  run_tests_gpu:
-#    if: ${{ inputs.job == 'run_tests_gpu' }}
-#    name: " "
-#    needs: setup
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        machine_type: [single-gpu, multi-gpu]
-#        slice_id: ${{ fromJSON(needs.setup.outputs.slice_ids) }}
-#    uses: ./.github/workflows/model_jobs.yml
-#    with:
-#      folder_slices: ${{ needs.setup.outputs.folder_slices }}
-#      machine_type: ${{ matrix.machine_type }}
-#      slice_id: ${{ matrix.slice_id }}
-#    secrets: inherit
+  run_tests_gpu:
+    if: ${{ inputs.job == 'run_tests_gpu' }}
+    name: " "
+    needs: setup
+    strategy:
+      fail-fast: false
+      matrix:
+        machine_type: [single-gpu, multi-gpu]
+        slice_id: ${{ fromJSON(needs.setup.outputs.slice_ids) }}
+    uses: ./.github/workflows/model_jobs.yml
+    with:
+      folder_slices: ${{ needs.setup.outputs.folder_slices }}
+      machine_type: ${{ matrix.machine_type }}
+      slice_id: ${{ matrix.slice_id }}
+    secrets: inherit
 
 #  run_examples_gpu:
 #    name: Examples directory
@@ -457,7 +457,8 @@ jobs:
 
   send_results:
     name: Slack Report
-    needs: ${{ inputs.job }}
+    needs: [run_tests_gpu, run_tests_quantization_torch_gpu]
+    if: ${{ always() }}
     uses: ./.github/workflows/slack-report.yml
     with:
       job: ${{ inputs.job }}
