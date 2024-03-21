@@ -86,8 +86,8 @@ from .stopping_criteria import (
 
 if TYPE_CHECKING:
     from ..modeling_utils import PreTrainedModel
-    from .streamers import BaseStreamer
     from ..tokenization_utils_base import PreTrainedTokenizerBase
+    from .streamers import BaseStreamer
 
 logger = logging.get_logger(__name__)
 
@@ -880,7 +880,11 @@ class GenerationMixin:
         return processors
 
     def _get_stopping_criteria(
-        self, generation_config: GenerationConfig, stopping_criteria: Optional[StoppingCriteriaList], tokenizer: Optional["PreTrainedTokenizerBase"] = None, **kwargs
+        self,
+        generation_config: GenerationConfig,
+        stopping_criteria: Optional[StoppingCriteriaList],
+        tokenizer: Optional["PreTrainedTokenizerBase"] = None,
+        **kwargs,
     ) -> StoppingCriteriaList:
         criteria = StoppingCriteriaList()
         if generation_config.max_length is not None:
