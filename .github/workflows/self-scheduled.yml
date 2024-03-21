@@ -36,47 +36,47 @@ env:
   NUM_SLICES: 2
 
 jobs:
-#  setup:
-#    if: ${{ inputs.job == 'run_tests_gpu' }}
-#    name: Setup
-#    strategy:
-#      matrix:
-#        machine_type: [single-gpu, multi-gpu]
-#    runs-on: ['${{ matrix.machine_type }}', nvidia-gpu, t4, daily-ci]
-#    container:
-#      image: huggingface/transformers-all-latest-gpu
-#      options: --gpus 0 --shm-size "16gb" --ipc host -v /mnt/cache/.cache/huggingface:/mnt/cache/
-#    outputs:
-#      folder_slices: ${{ steps.set-matrix.outputs.folder_slices }}
-#      slice_ids: ${{ steps.set-matrix.outputs.slice_ids }}
-#    steps:
-#      - name: Update clone
-#        working-directory: /transformers
-#        run: |
-#          git fetch && git checkout ${{ github.sha }}
-#
-#      - name: Cleanup
-#        working-directory: /transformers
-#        run: |
-#          rm -rf tests/__pycache__
-#          rm -rf tests/models/__pycache__
-#          rm -rf reports
-#
-#      - name: Show installed libraries and their versions
-#        working-directory: /transformers
-#        run: pip freeze
-#
-#      - id: set-matrix
-#        name: Identify models to test
-#        working-directory: /transformers/tests
-#        run: |
-#          echo "folder_slices=$(python3 ../utils/split_model_tests.py --num_splits ${{ env.NUM_SLICES }})" >> $GITHUB_OUTPUT
-#          echo "slice_ids=$(python3 -c 'd = list(range(${{ env.NUM_SLICES }})); print(d)')" >> $GITHUB_OUTPUT
-#
-#      - name: NVIDIA-SMI
-#        run: |
-#          nvidia-smi
-#
+  setup:
+    if: ${{ inputs.job == 'run_tests_gpu' }}
+    name: Setup
+    strategy:
+      matrix:
+        machine_type: [single-gpu, multi-gpu]
+    runs-on: ['${{ matrix.machine_type }}', nvidia-gpu, t4, daily-ci]
+    container:
+      image: huggingface/transformers-all-latest-gpu
+      options: --gpus 0 --shm-size "16gb" --ipc host -v /mnt/cache/.cache/huggingface:/mnt/cache/
+    outputs:
+      folder_slices: ${{ steps.set-matrix.outputs.folder_slices }}
+      slice_ids: ${{ steps.set-matrix.outputs.slice_ids }}
+    steps:
+      - name: Update clone
+        working-directory: /transformers
+        run: |
+          git fetch && git checkout ${{ github.sha }}
+
+      - name: Cleanup
+        working-directory: /transformers
+        run: |
+          rm -rf tests/__pycache__
+          rm -rf tests/models/__pycache__
+          rm -rf reports
+
+      - name: Show installed libraries and their versions
+        working-directory: /transformers
+        run: pip freeze
+
+      - id: set-matrix
+        name: Identify models to test
+        working-directory: /transformers/tests
+        run: |
+          echo "folder_slices=$(python3 ../utils/split_model_tests.py --num_splits ${{ env.NUM_SLICES }})" >> $GITHUB_OUTPUT
+          echo "slice_ids=$(python3 -c 'd = list(range(${{ env.NUM_SLICES }})); print(d)')" >> $GITHUB_OUTPUT
+
+      - name: NVIDIA-SMI
+        run: |
+          nvidia-smi
+
   run_tests_gpu:
     if: ${{ inputs.job == 'run_tests_gpu' }}
     name: " "
