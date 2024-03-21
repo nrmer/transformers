@@ -37,29 +37,7 @@ import os
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--num_splits",
-        type=int,
-        default=1,
-        help="the number of splits into which the (flat) list of folders will be split.",
-    )
-    args = parser.parse_args()
+    sec = os.getenv("HF_HUB_READ_TOKEN", None)
+    print(type(sec))
+    print(sec[:4])
 
-    tests = os.getcwd()
-    model_tests = os.listdir(os.path.join(tests, "models"))
-    d1 = sorted(filter(os.path.isdir, os.listdir(tests)))
-    d2 = sorted(filter(os.path.isdir, [f"models/{x}" for x in model_tests]))
-    d1.remove("models")
-    d = d2 + d1
-
-    num_jobs = len(d)
-    num_jobs_per_splits = num_jobs // args.num_splits
-
-    model_splits = []
-    end = 0
-    for idx in range(args.num_splits):
-        start = end
-        end = start + num_jobs_per_splits + (1 if idx < num_jobs % args.num_splits else 0)
-        model_splits.append(d[start:end])
-    print(model_splits)
