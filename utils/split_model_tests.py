@@ -65,7 +65,7 @@ if __name__ == "__main__":
     model_splits = [["models/bert"], ["models/gpt2"]]
 
     sec = os.getenv("HF_HUB_READ_TOKEN", None)
-    print(type(sec))
-    print(sec[:4])
+    # print(type(sec))
+    # print(sec[:4])
 
     print(model_splits)
