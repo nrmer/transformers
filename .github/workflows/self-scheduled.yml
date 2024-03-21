@@ -6,7 +6,19 @@ name: Self-hosted runner (scheduled)
 # `huggingface/transformers-pytorch-deepspeed-latest-gpu`, which can be found at
 # `docker/transformers-pytorch-deepspeed-latest-gpu/Dockerfile`
 
-
+on:
+  workflow_call:
+    inputs:
+      job:
+        required: true
+        type: string
+    secrets:
+      CI_SLACK_BOT_TOKEN:
+        required: true
+      CI_SLACK_REPORT_CHANNEL_ID:
+        required: true
+      ACCESS_REPO_INFO_TOKEN:
+        required: true
 
 env:
   HF_HOME: /mnt/cache
