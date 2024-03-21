@@ -25,7 +25,7 @@ jobs:
       CI_SLACK_BOT_TOKEN: ${{ secrets.CI_SLACK_BOT_TOKEN }}
       CI_SLACK_REPORT_CHANNEL_ID: ${{ secrets.CI_SLACK_CHANNEL_ID_DAILY }}
       ACCESS_REPO_INFO_TOKEN: ${{ secrets.CI_SLACK_BOT_TOKEN }}
-      HF_HUB_READ_TOKEN: ${{ secrets.HF_HUB_READ_TOKEN }}
+
 
   quantization-ci:
     name: Quantization CI
@@ -36,4 +36,3 @@ jobs:
       CI_SLACK_BOT_TOKEN: ${{ secrets.CI_SLACK_BOT_TOKEN }}
       CI_SLACK_REPORT_CHANNEL_ID: ${{ secrets.CI_SLACK_BOT_TOKEN }}
       ACCESS_REPO_INFO_TOKEN: ${{ secrets.CI_SLACK_BOT_TOKEN }}
-      HF_HUB_READ_TOKEN: ${{ secrets.HF_HUB_READ_TOKEN }}
