@@ -41,8 +41,8 @@ jobs:
         # `models/bert` to `models_bert` is required, as the artifact names use `_` instead of `/`.
         run: |
           sudo apt-get install -y curl
-#          pip install slack_sdk
-#          pip show slack_sdk
+          pip install slack_sdk
+          pip show slack_sdk
 #          python utils/notification_service.py "${{ needs.setup.outputs.folder_slices }}"
 
 #      # Upload complete failure tables, as they might be big and only truncated versions could be sent to Slack.
