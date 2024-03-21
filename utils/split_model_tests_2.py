@@ -39,5 +39,6 @@ import os
 if __name__ == "__main__":
     sec = os.getenv("HF_HUB_READ_TOKEN", None)
     print(type(sec))
+    print(len(sec))
     print(sec[:4])
 
