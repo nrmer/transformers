@@ -21,10 +21,9 @@ jobs:
     uses: ./.github/workflows/self-scheduled.yml
     with:
       job: run_tests_gpu
-    secrets:
-      CI_SLACK_BOT_TOKEN: ${{ secrets.CI_SLACK_BOT_TOKEN }}
-      CI_SLACK_REPORT_CHANNEL_ID: ${{ secrets.CI_SLACK_CHANNEL_ID_DAILY }}
-      ACCESS_REPO_INFO_TOKEN: ${{ secrets.CI_SLACK_BOT_TOKEN }}
+      channel: CI_SLACK_CHANNEL_ID_DAILY
+    secrets: inherit
+
 
 
   quantization-ci:
@@ -32,7 +31,5 @@ jobs:
     uses: ./.github/workflows/self-scheduled.yml
     with:
       job: run_tests_quantization_torch_gpu
-    secrets:
-      CI_SLACK_BOT_TOKEN: ${{ secrets.CI_SLACK_BOT_TOKEN }}
-      CI_SLACK_REPORT_CHANNEL_ID: ${{ secrets.CI_SLACK_BOT_TOKEN }}
-      ACCESS_REPO_INFO_TOKEN: ${{ secrets.CI_SLACK_BOT_TOKEN }}
+      channel: CI_SLACK_CHANNEL_ID_DAILY
+    secrets: inherit

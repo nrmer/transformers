@@ -12,14 +12,9 @@ on:
       job:
         required: true
         type: string
-    secrets:
-      CI_SLACK_BOT_TOKEN:
+      channel:
         required: true
-      CI_SLACK_REPORT_CHANNEL_ID:
-        required: true
-      ACCESS_REPO_INFO_TOKEN:
-        required: true
-
+        type: string
 
 env:
   HF_HOME: /mnt/cache
@@ -30,9 +25,6 @@ env:
   # For gated repositories, we still need to agree to share information on the Hub repo. page in order to get access.
   # This token is created under the bot `hf-transformers-bot`.
   HF_HUB_READ_TOKEN: ${{ secrets.HF_HUB_READ_TOKEN }}
-  CI_SLACK_BOT_TOKEN: ${{ secrets.CI_SLACK_BOT_TOKEN }}
-  CI_SLACK_REPORT_CHANNEL_ID: ${{ secrets.CI_SLACK_REPORT_CHANNEL_ID }}
-  ACCESS_REPO_INFO_TOKEN: ${{ secrets.ACCESS_REPO_INFO_TOKEN }}
   SIGOPT_API_TOKEN: ${{ secrets.SIGOPT_API_TOKEN }}
   TF_FORCE_GPU_ALLOW_GROWTH: true
   RUN_PT_TF_CROSS_TESTS: 1
@@ -472,7 +464,5 @@ jobs:
     uses: ./.github/workflows/slack-report.yml
     with:
       job: ${{ inputs.job }}
-    secrets:
-      CI_SLACK_BOT_TOKEN: ${{ secrets.CI_SLACK_BOT_TOKEN }}
-      CI_SLACK_REPORT_CHANNEL_ID: ${{ secrets.CI_SLACK_BOT_TOKEN }}
-      ACCESS_REPO_INFO_TOKEN: ${{ secrets.CI_SLACK_BOT_TOKEN }}
+      channel: ${{ inputs.channel }}
+    secrets: inherit

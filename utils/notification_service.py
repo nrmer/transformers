@@ -852,6 +852,13 @@ def prepare_reports(title, header, reports, to_truncate=True):
 
 
 if __name__ == "__main__":
+
+    a = os.environ["CI_SLACK_REPORT_CHANNEL_ID"]
+    b = os.environ[a]
+    print(a)
+    print(b[:4])
+    exit(0)
+
     # runner_status = os.environ.get("RUNNER_STATUS")
     # runner_env_status = os.environ.get("RUNNER_ENV_STATUS")
     setup_status = os.environ.get("SETUP_STATUS")
