@@ -410,6 +410,21 @@ class LlamaAttention(nn.Module):
         key_states = repeat_kv(key_states, self.num_key_value_groups)
         value_states = repeat_kv(value_states, self.num_key_value_groups)
 
+
+        # torch.save(query_states, "/root/n50038561/LLM-infer/benchmark/reference_query.pt")
+        # torch.save(key_states, "/root/n50038561/LLM-infer/benchmark/reference_key.pt")
+        # torch.save(value_states, "/root/n50038561/LLM-infer/benchmark/reference_value.pt")
+        # torch.save(attention_mask, "/root/n50038561/LLM-infer/benchmark/reference_mask.pt")
+        # print(query_states.size())
+        # print(key_states.size())
+        # print(value_states.size())
+        # print(attention_mask.size())
+        # print(self.head_dim)
+        # print(self.num_heads)
+        # print(self.attention_dropout)
+        # print(self.training)
+        # exit()
+
         attn_weights = torch.matmul(query_states, key_states.transpose(2, 3)) / math.sqrt(self.head_dim)
 
         if attn_weights.size() != (bsz, self.num_heads, q_len, kv_seq_len):
@@ -486,7 +501,6 @@ class LlamaFlashAttention2(LlamaAttention):
 
             # overwrite attention_mask with padding_mask
             attention_mask = kwargs.pop("padding_mask")
-
         output_attentions = False
 
         bsz, q_len, _ = hidden_states.size()
@@ -1342,7 +1356,7 @@ class LlamaForSequenceClassification(LlamaPreTrainedModel):
             `config.num_labels > 1` a classification loss is computed (Cross-Entropy).
         """
         return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-
+        
         transformer_outputs = self.model(
             input_ids,
             attention_mask=attention_mask,

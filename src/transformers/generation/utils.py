@@ -19,6 +19,7 @@ import inspect
 import warnings
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Tuple, Union
+import time     ######
 
 import torch
 import torch.distributed as dist
@@ -119,6 +120,7 @@ class GreedySearchDecoderOnlyOutput(ModelOutput):
     attentions: Optional[Tuple[Tuple[torch.FloatTensor]]] = None
     hidden_states: Optional[Tuple[Tuple[torch.FloatTensor]]] = None
     past_key_values: Optional[Tuple[Tuple[Tuple[torch.FloatTensor]]]] = None
+    kwargs: Optional[Dict] = None     ######
 
 
 @dataclass
@@ -1494,7 +1496,6 @@ class GenerationMixin:
                     - [`~generation.BeamSearchEncoderDecoderOutput`],
                     - [`~generation.BeamSampleEncoderDecoderOutput`]
         """
-
         if synced_gpus is None:
             if is_deepspeed_zero3_enabled() and dist.get_world_size() > 1:
                 synced_gpus = True
@@ -2516,6 +2517,9 @@ class GenerationMixin:
         >>> tokenizer.batch_decode(outputs, skip_special_tokens=True)
         ["It might be possible to get a better understanding of the nature of the problem, but it's not"]
         ```"""
+        timings = {
+            "time": [],
+        }
         # init values
         logits_processor = logits_processor if logits_processor is not None else LogitsProcessorList()
         stopping_criteria = stopping_criteria if stopping_criteria is not None else StoppingCriteriaList()
@@ -2562,6 +2566,7 @@ class GenerationMixin:
 
         this_peer_finished = False  # used by synced_gpus only
         while True:
+            timings['time'].append(time.time())     ######
             if synced_gpus:
                 # Under synced_gpus the `forward` call must continue until all gpus complete their sequence.
                 # The following logic allows an early break if all peers finished generating their sequence
@@ -2641,6 +2646,7 @@ class GenerationMixin:
                 this_peer_finished = True
 
             if this_peer_finished and not synced_gpus:
+                timings['time'].append(time.time())     ######
                 break
 
         if streamer is not None:
@@ -2665,6 +2671,7 @@ class GenerationMixin:
                     attentions=decoder_attentions,
                     hidden_states=decoder_hidden_states,
                     past_key_values=model_kwargs.get("past_key_values"),
+                    kwargs = timings
                 )
         else:
             return input_ids
