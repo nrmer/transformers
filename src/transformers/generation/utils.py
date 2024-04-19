@@ -2520,6 +2520,7 @@ class GenerationMixin:
         timings = {
             "time": [],
         }
+        print("HI")
         # init values
         logits_processor = logits_processor if logits_processor is not None else LogitsProcessorList()
         stopping_criteria = stopping_criteria if stopping_criteria is not None else StoppingCriteriaList()
@@ -2565,6 +2566,7 @@ class GenerationMixin:
         unfinished_sequences = torch.ones(input_ids.shape[0], dtype=torch.long, device=input_ids.device)
 
         this_peer_finished = False  # used by synced_gpus only
+        decode_stage = False
         while True:
             timings['time'].append(time.time())     ######
             if synced_gpus:
@@ -2586,13 +2588,18 @@ class GenerationMixin:
                 return_dict=True,
                 output_attentions=output_attentions,
                 output_hidden_states=output_hidden_states,
+                decode_stage=decode_stage,
             )
 
             if synced_gpus and this_peer_finished:
                 continue  # don't waste resources running the code we don't need
 
+            if decode_stage:
+                exit()
+
             next_token_logits = outputs.logits[:, -1, :]
 
+            # exit() ######
             # pre-process distribution
             next_tokens_scores = logits_processor(input_ids, next_token_logits)
 
@@ -2615,6 +2622,15 @@ class GenerationMixin:
                     )
 
             # argmax
+            # print(next_tokens_scores) ######
+            # with open("batched_fst_prompt.csv", 'a') as fp:
+            #     for q in next_tokens_scores[0]:
+            #         fp.write('%f ' % (q))
+            #     fp.write('/n')
+            # with open("batched_snd_prompt.csv", 'a') as fp:
+            #     for q in next_tokens_scores[1]:
+            #         fp.write('%f ' % (q))
+            #     fp.write('/n')
             next_tokens = torch.argmax(next_tokens_scores, dim=-1)
 
             # finished sentences should have their next token be a padding token
@@ -2648,6 +2664,8 @@ class GenerationMixin:
             if this_peer_finished and not synced_gpus:
                 timings['time'].append(time.time())     ######
                 break
+            
+            # decode_stage = True
 
         if streamer is not None:
             streamer.end()

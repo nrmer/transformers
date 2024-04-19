@@ -63,6 +63,7 @@ class DynamicCache(Cache):
     """
 
     def __init__(self) -> None:
+        # print("@@@@@@@@@@@@@@@@@@@@")
         self.key_cache: List[torch.Tensor] = []
         self.value_cache: List[torch.Tensor] = []
         self.seen_tokens = 0  # Used in `generate` to keep tally of how many tokens the cache has seen
@@ -182,6 +183,7 @@ class SinkCache(Cache):
     """
 
     def __init__(self, window_length: int, num_sink_tokens: int) -> None:
+        # print("#######################")
         self.key_cache: List[torch.Tensor] = []
         self.value_cache: List[torch.Tensor] = []
         self.window_length = window_length
